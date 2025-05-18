@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tela Infinita com Menu Lateral</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            display: flex;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Menu lateral */
+        .menu-lateral {
+            width: 250px;
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-right: 2px solid #ddd;
+        }
+
+        .menu-lateral h2 {
+            margin-top: 0;
+        }
+
+        .menu-lateral button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            font-size: 16px;
+        }
+
+        .menu-lateral button:hover {
+            background-color: #45a049;
+        }
+
+        /* Seção do menu de escrita */
+        .menu-escrita {
+            margin-top: 15px;
+            display: none;
+        }
+
+        .menu-escrita select,
+        .menu-escrita input {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .menu-escrita label {
+            margin-right: 10px;
+        }
+
+        /* Tela infinita */
+        .tela-branca {
+            flex: 1;
+            background-color: #fff;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .quadro {
+            width: 300px;
+            height: 150px;
+            border: 1px solid #ddd;
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+            overflow-y: auto;
+            border-radius: 5px;
+            resize: both;
+            white-space: nowrap;
+        }
+
+        /* Para o layout de separar os submenus */
+        .menu-lateral hr {
+            margin: 20px 0;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-lateral">
+        <h2>Menu de Opções</h2>
+        
+        <!-- Menu de Escrita -->
+        <button id="menu-escrita">Escrita</button>
+        <div class="menu-escrita" id="menu-escrita-opcoes">
+            <h3>Opções de Escrita</h3>
+            <button id="adicionar-quadro">Adicionar Quadro</button>
+            <label for="fonte">Fonte: </label>
+            <select id="fonte">
+                <option value="Arial">Arial</option>
+                <option value="Courier New">Courier New</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Tahoma">Tahoma</option>
+            </select>
+            <label for="cor-fonte">Cor: </label>
+            <input type="color" id="cor-fonte">
+            <label for="tamanho-fonte">Tamanho: </label>
+            <input type="number" id="tamanho-fonte" value="16" min="8" max="72">
+        </div>
+
+        <hr>
+
+        <!-- Menu de Planilhas -->
+        <button id="menu-planilhas">Pacote Office</button>
+        <div class="menu-planilhas" id="menu-planilhas-opcoes">
+            <h3>Pacote Office</h3>
+            <button id="google-sheets">Abrir Google Sheets</button>
+            <button id="google-docs">Abrir Google Docs (Word)</button>
+            <button id="google-slides">Abrir Google Slides</button>
+        </div>
+    </div>
+
+    <!-- Container para os quadros -->
+    <div class="tela-branca" id="tela-branca"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Funcionalidade do botão de "Escrita"
+            document.getElementById('menu-escrita').addEventListener('click', function() {
+                const menuEscrita = document.getElementById('menu-escrita-opcoes');
+                menuEscrita.style.display = (menuEscrita.style.display === 'none') ? 'block' : 'none';
+            });
+
+            // Funcionalidade do botão de "Pacote Office"
+            document.getElementById('menu-planilhas').addEventListener('click', function() {
+                const menuPlanilhas = document.getElementById('menu-planilhas-opcoes');
+                menuPlanilhas.style.display = (menuPlanilhas.style.display === 'none') ? 'block' : 'none';
+            });
+
+            // Função para adicionar quadro
+            document.getElementById('adicionar-quadro').addEventListener('click', function() {
+                const quadro = document.createElement('div');
+                quadro.classList.add('quadro');
+                quadro.contentEditable = true;
+                quadro.textContent = "Escreva aqui...";
+                document.getElementById('tela-branca').appendChild(quadro);
+
+                // Tornar quadro removível ao clicar duas vezes
+                quadro.addEventListener('dblclick', function() {
+                    quadro.remove();
+                });
+            });
+
+            // Configuração da fonte, cor e tamanho
+            document.getElementById('fonte').addEventListener('change', function(event) {
+                const fonte = event.target.value;
+                document.querySelectorAll('.quadro').forEach(function(quadro) {
+                    quadro.style.fontFamily = fonte;
+                });
+            });
+
+            document.getElementById('cor-fonte').addEventListener('input', function(event) {
+                const cor = event.target.value;
+                document.querySelectorAll('.quadro').forEach(function(quadro) {
+                    quadro.style.color = cor;
+                });
+            });
+
+            document.getElementById('tamanho-fonte').addEventListener('input', function(event) {
+                const tamanho = event.target.value;
+                document.querySelectorAll('.quadro').forEach(function(quadro) {
+                    quadro.style.fontSize = tamanho + 'px';
+                });
+            });
+
+            // Abrir o Google Sheets, Google Docs e Google Slides
+            document.getElementById('google-sheets').addEventListener('click', function() {
+                window.open("https://docs.google.com/spreadsheets/u/0/", "_blank");
+            });
+
+            document.getElementById('google-docs').addEventListener('click', function() {
+                window.open("https://docs.google.com/document/u/0/", "_blank");
+            });
+
+            document.getElementById('google-slides').addEventListener('click', function() {
+                window.open("https://www.google.com/slides/about/", "_blank");
+            });
+        });
+    </script>
+</body>
+</html>
